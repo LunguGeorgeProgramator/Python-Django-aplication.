@@ -40,7 +40,6 @@ function popUpGuide(target, json) {
 	
 	// set up the next activ tip div
 	element.find( ".next-div" ).click(function(){
-		console.log(nextElement);
 		if (nextElement !== null){
 			$( nextElement ).trigger( "click" );
 			element.remove();
