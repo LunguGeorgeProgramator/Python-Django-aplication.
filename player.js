@@ -10,12 +10,77 @@ fetch('guide_v.json')
   for (var i in jsonStep) {
 	  $(jsonStep[i]['selector']).attr('step_attr', jsonStep[i]['id']);
 	  $(jsonStep[i]['selector']).click(function() {
+		  clearOpenElements();
 		  popUpGuide($(this), jsonStep);
 		});
   }
+  createMainMenu(jsonStep);
+  $('.right-menu-G').click(function(){
+	  showGiudMenu($('.menu-guid'));
+  });
 }).catch(function(error) {
   console.log(error.message);
 });
+
+function clearOpenElements(){
+	$('.close-Tip').remove(); // clear all others pop Up's open
+} 
+
+function createMainMenu(jsonStep){
+	const section = $( "<section class='menu-guid' open-menu='close'></section>" );
+	const tagContainerLeft = $( "<span class='left-menu-G'></span>" )
+	const tagContainerRight = $( "<span class='right-menu-G'>Click Here</span>" )
+	const tagHead = $( "<b> Click the number of step to start, or click one of page elements.</b>" )
+	tagContainerLeft.append(tagHead);
+	for (var i in jsonStep) {
+		const step = $( "<p class='menu-tiem' jump-to='"+jsonStep[i]['selector']+"'>Click here to jump to step "+(parseInt(i)+1)+".</p>" );
+		step.click(function(event) {
+			clearOpenElements();
+			const jumpElement = $(this).attr("jump-to");
+		    $(jumpElement).trigger( "click" );
+		});
+		hoverEvent(step)
+		tagContainerLeft.append(step);
+	}
+	section.append(tagContainerLeft);
+	section.append(tagContainerRight);
+	section.css({
+		"width": "200px",
+		"margin": "0px",
+		"position": "absolute",
+		"background": "lightskyblue",
+		"left": "-160px",
+		"top": "30%"
+	});
+	section.find('.left-menu-G').css({
+		"width": "80%",
+		"float": "left",
+		"background": "lightskyblue"
+	});
+	section.find('.right-menu-G').css({
+		"width": "15%",
+		"padding-right": "5%",
+		"float": "right",
+		"cursor": "pointer",
+		"background": "dodgerblue",
+		"height": "230px",
+		"writing-mode": "vertical-rl",
+		"text-orientation": "upright",
+		"text-align": "center"
+	});
+	$( "body" ).append( section );
+}
+
+function showGiudMenu(section){
+	const openAttr = section.attr('open-menu');
+	if (openAttr == 'close'){
+		section.animate({ left: "+=160" });
+		section.attr('open-menu', 'open');
+	}else {
+		section.animate({ left: "-=160" });
+		section.attr('open-menu', 'close');
+	}
+} 
 
 function popUpGuide(target, json) {
 	var limit = json.length;
@@ -54,6 +119,18 @@ function popUpGuide(target, json) {
 	target.after(element);
 }
 
+function hoverEvent(button){
+	button.mouseenter(function(event) {
+		$(event.target).css({ "background-color": "cornflowerblue" });
+	}).mouseleave(function() { 
+		$(this).css({ "background-color": "cadetblue" });
+	});
+	button.css({
+		"background-color": "cadetblue",
+		"cursor": "pointer"
+	});
+}
+
 function buildPopUpSection(curentPopUpOptions){
 	var nextButton = curentPopUpOptions['next'] !== null? '<p style="width: 50%; float: right; border-radius:  0 0 10px;" class="button next-div" >next</p>' : "";
 	var withButton = curentPopUpOptions['next'] !== null? "50%; border-radius: 0 0 0 10px;" : "100%; border-radius: 0 0 10px 10px;";
@@ -72,21 +149,13 @@ function buildPopUpSection(curentPopUpOptions){
 		"text-align": "center",
 		"position": "relative"
 	});
-	button.css({
-		"background-color": "cadetblue",
-		"cursor": "pointer"
-	});
 	element.css({
 	"background-color": "POWDERBLUE", 
 	"border-radius": "10px", 
 	});
 	
 	// set hover action on button
-	button.mouseenter(function(event) {
-		$(event.target).css({ "background-color": "cornflowerblue" });
-	}).mouseleave(function() { 
-		$(this).css({ "background-color": "cadetblue" });
-	});
+	hoverEvent(button);
 	
 	return element;
 }
