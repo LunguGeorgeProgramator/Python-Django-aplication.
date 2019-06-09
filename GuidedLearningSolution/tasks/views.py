@@ -16,7 +16,8 @@ content_text_list = [
 
 def home(request):
     context = {
-        'content_data': content_text_list
+        'content_data': content_text_list,
+        'title_page': 'Tasks'
     }
     return render(request, 'tasks/tasks.html', context)
 

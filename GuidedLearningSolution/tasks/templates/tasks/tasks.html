@@ -1,7 +1,7 @@
-<html>
- <h1> You can do it. </h1>
+{% extends "tasks/main.html" %}
+{% block main_content %}
 	{% for text_send_row in content_data %}
 		<h1>{{ text_send_row.titlu }}</h1>
 		<p>{{ text_send_row.desc }}</p>
 	{% endfor %}
-</html>
+{% endblock main_content %}
