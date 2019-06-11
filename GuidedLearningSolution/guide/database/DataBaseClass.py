@@ -78,10 +78,25 @@ class DataBase:
         cursor.execute(f"INSERT INTO guideRows SET name_guide='{new_name}'")
         db.commit()
 
+    def remove_guide(self, id):
+        cursor, db = self.connect_data_base()
+        cursor.execute(f"DELETE FROM guideRows WHERE ID_guide={id}")
+        db.commit()
 
 p1 = DataBase()
-#p1.insert_new_guides("Guide_2")
+# p1.insert_new_guides("Guide_3")
+# p1.insert_new_guides("Guide_4")
+# p1.insert_new_guides("Guide_5")
+# p1.insert_new_guides("Guide_6")
+# p1.insert_new_guides("Guide_7")
+# p1.insert_new_guides("Guide_8")
+# p1.insert_new_guides("Guide_9")
+# p1.insert_new_guides("Guide_10")
 # print(p1.get_results_guides())
-print(p1.get_results_guides(18))
+# print(p1.get_results_guides(18))
+
+for row in p1.get_results_guides():
+    print(row[0])
+    print(row[1])
 
 

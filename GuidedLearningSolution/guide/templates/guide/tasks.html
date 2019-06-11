@@ -1,0 +1,46 @@
+{% extends "guide/main.html" %}
+{% block main_content %}
+	<div class="bd-example">
+		<form  method="post" action="">
+			<div class="form-group">
+				{% csrf_token %}
+				{{ form.desc }}
+			</div>
+			<button class="btn btn-primary" type="submit">Create a new guide.</button>
+		</form>
+	</div>
+	</br>
+	<ul class="list-group">
+	{% for text_send_row in content_data %}
+		<li class="list-group-item list-group-item-action">
+			<strong>{{ text_send_row.desc }}</strong>
+			<form method="post">
+				{% csrf_token %}
+				<input type="hidden" name="id_guide" value="{{ text_send_row.id }}">
+				<button class="btn btn-secondary btn-lg active class_b_list" type="submint">Remove</button>
+			</form>
+			<a href="#" class="btn btn-secondary btn-lg active class_b_list" style="margin-right: 10px">
+				Details
+			</a>
+		</li>
+	{% endfor %}
+	</ul>
+<!--<h1>{{name_get_var}}</h1>-->
+<!--<h2>{{ text }}</h2>-->
+<style>
+	.bd-example{
+		padding: 1.5rem;
+		margin-right: 0;
+		margin-left: 0;
+		border-width: .2rem;
+		position: relative;
+		margin: 1rem 0px 0;
+		border: solid #f7f7f9;
+	}
+	.class_b_list{
+		float: right;
+		width: 15%;
+		border: none;
+	}
+</style>
+{% endblock main_content %}
