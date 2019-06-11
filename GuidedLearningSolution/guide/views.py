@@ -3,7 +3,7 @@ from django.http import HttpResponseRedirect
 from django.http import HttpResponse
 from guide.database.DataBaseClass import DataBase
 from django.views.generic import TemplateView
-from guide.forms import IndexFrom
+from guide.forms import IndexFrom, DetailsFrom
 
 
 class GuideViews(TemplateView, DataBase):
@@ -62,3 +62,31 @@ class GuideViews(TemplateView, DataBase):
     #         'form': form
     #     }
     #     return render(request, self.template_name, context)
+
+
+class GuideDetails(TemplateView, DataBase):
+    template_name = "guide/details.html"
+
+    def set_context(self, id_guide):
+        content_text_list = []
+        for row in self.get_results_guide_steps(id_guide):
+            content_text_list.append(
+                {
+                    'id': row[0],
+                    'step_content': row[1],
+                    'step_selector': row[2],
+                    'step_next': row[3],
+                    'id_guide': row[4],
+                }
+            )
+        return content_text_list
+
+    def get(self, request):
+        id_guide = request.GET.get('id_guide')
+        form = IndexFrom()
+        context = {
+            'content_data': self.set_context(id_guide),
+            'form': form,
+            # 'name_get_var': id_guide
+        }
+        return render(request, self.template_name, context)

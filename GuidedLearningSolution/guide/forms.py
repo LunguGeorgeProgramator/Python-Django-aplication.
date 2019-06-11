@@ -10,3 +10,13 @@ class IndexFrom(forms.Form):
         }
     ))
     # id = forms.HiddenInput()
+
+
+class DetailsFrom(forms.Form):
+    # desc = forms.CharField(required=False)
+    desc = forms.CharField(widget=forms.TextInput(
+        attrs={
+        'class': 'form-control',
+        'placeholder': 'Add guide name ...'
+        }
+    ))

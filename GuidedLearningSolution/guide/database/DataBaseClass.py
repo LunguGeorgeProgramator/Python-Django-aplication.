@@ -83,6 +83,13 @@ class DataBase:
         cursor.execute(f"DELETE FROM guideRows WHERE ID_guide={id}")
         db.commit()
 
+    def get_results_guide_steps(self, id_guide, id_row=None):
+        cursor, _ = self.connect_data_base()
+        set_condition = f" AND ID_steps={id_row} " if id_row else ""
+        cursor.execute(f"select * from {self.table_steps} WHERE ID_guide = {id_guide} {set_condition};")
+        return cursor.fetchall()
+
+
 p1 = DataBase()
 # p1.insert_new_guides("Guide_3")
 # p1.insert_new_guides("Guide_4")

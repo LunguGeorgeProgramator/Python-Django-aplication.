@@ -13,13 +13,13 @@
 	<ul class="list-group">
 	{% for text_send_row in content_data %}
 		<li class="list-group-item list-group-item-action">
-			<strong>{{ text_send_row.desc }}</strong>
+			<strong class="class_s_list">{{ text_send_row.desc }}</strong>
 			<form method="post">
 				{% csrf_token %}
 				<input type="hidden" name="id_guide" value="{{ text_send_row.id }}">
 				<button class="btn btn-secondary btn-lg active class_b_list" type="submint">Remove</button>
 			</form>
-			<a href="#" class="btn btn-secondary btn-lg active class_b_list" style="margin-right: 10px">
+			<a href="details?id_guide={{ text_send_row.id }}" class="btn btn-secondary btn-lg active class_b_list" style="margin-right: 10px">
 				Details
 			</a>
 		</li>
@@ -36,6 +36,9 @@
 		position: relative;
 		margin: 1rem 0px 0;
 		border: solid #f7f7f9;
+	}
+	.class_s_list{
+		float: left;
 	}
 	.class_b_list{
 		float: right;
