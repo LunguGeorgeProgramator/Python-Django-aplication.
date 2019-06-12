@@ -1,29 +1,45 @@
 {% extends "guide/main.html" %}
 {% block main_content %}
-<!--	<div class="bd-example">-->
-<!--		<form  method="post" action="">-->
-<!--			<div class="form-group">-->
-<!--				{% csrf_token %}-->
-<!--				{{ form.desc }}-->
-<!--			</div>-->
-<!--			<button class="btn btn-primary" type="submit">Create a new guide.</button>-->
-<!--		</form>-->
-<!--	</div>-->
-<!--	</br>-->
+	{{text}}
+	<div class="bd-example" style="height: 100px;">
+    	<a  href="javascript:history.back()" class="btn btn-secondary btn-lg active class_b_list" style="margin-right: 10px">
+				Back
+			</a>
+	</div>
+	<div class="bd-example">
+		<form  method="post" action="">
+			<div class="form-group">
+				{% csrf_token %}
+				{{ form }}
+				<input type="hidden" value="{{ guide_id }}" name="ID_steps" >
+			</div>
+			<button class="btn btn-primary" type="submit">Create a new step for the guide.</button>
+		</form>
+	</div>
+	</br>
 	<ul class="list-group">
 	<pre> {"steps": [ </pre>
 	{% for text_send_row in content_data %}
 		<li class="list-group-item list-group-item-action">
-			<pre class="class_s_list">{"id": "{{ text_send_row.id }}","content": "{{ text_send_row.step_content }}","selector": "{{ text_send_row.step_selector }}","next": "{{ text_send_row.step_next }}"},  </pre>
+			<pre class="class_s_list">
+				<form method="post" action="details?id_guide={{guide_id}}">
+					{% csrf_token %}
+					<b class="class_s_list">{</b>
+					<b class="class_s_list">"id": "</b><input class="form-control" value="{{ text_send_row.id }}" name="id" ><b>",</b>
+					<b class="class_s_list">"content": "</b><input class="form-control" value="{{ text_send_row.step_content }}" name="step_content" ><b>",</b>
+					<b class="class_s_list">"selector": "</b><input class="form-control" value="{{ text_send_row.step_selector }}" name="step_selector" ><b>",</b>
+					<b class="class_s_list">"next": "</b><input class="form-control" value="{{ text_send_row.step_next }}" name="step_next" ><b>"</b>
+					<input type="hidden" name="id_step_update" value="{{ text_send_row.id_step }}">
+					<b class="class_s_list">},</b>
+					<button class="btn btn-secondary btn-lg active" type="submint">Update</button>
+				</form>
+			</pre>
 <!--			<strong class="class_s_list">{{ text_send_row.step_content }}</strong>-->
 			<form method="post">
 				{% csrf_token %}
-<!--				<input type="hidden" name="id_guide" value="{{ text_send_row.id }}">-->
+				<input type="hidden" name="id_step" value="{{ text_send_row.id_step }}">
 				<button class="btn btn-secondary btn-lg active class_b_list" type="submint">Remove</button>
 			</form>
-			<a href="#" class="btn btn-secondary btn-lg active class_b_list" style="margin-right: 10px">
-				Details
-			</a>
 		</li>
 	{% endfor %}
 	<pre>]}</pre>

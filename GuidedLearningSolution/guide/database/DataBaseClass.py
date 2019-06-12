@@ -18,6 +18,7 @@ class DataBase:
                                 );"""
     SQL_create_guide_steps = f"""CREATE TABLE {table_steps} (
                                  ID_steps int NOT NULL AUTO_INCREMENT,
+                                 id int NOT NULL,
                                  step_content varchar(255) NOT NULL,
                                  step_selector varchar(255) NOT NULL,
                                  step_next int NOT NULL,
@@ -89,6 +90,35 @@ class DataBase:
         cursor.execute(f"select * from {self.table_steps} WHERE ID_guide = {id_guide} {set_condition};")
         return cursor.fetchall()
 
+    def insert_new_guide_step(self, id_steps, step_content, step_selector, step_next, id_guide):
+        cursor, db = self.connect_data_base()
+        cursor.execute(f"""INSERT INTO {self.table_steps} 
+                            SET 
+                            id={id_steps},
+                            step_content='{step_content}',
+                            step_selector='{step_selector}',
+                            step_next={step_next},
+                            id_guide={id_guide};
+                        """)
+        db.commit()
+
+    def update_guide_step(self, id_steps, step_content, step_selector, step_next, id_step):
+        cursor, db = self.connect_data_base()
+        cursor.execute(f"""UPDATE {self.table_steps} 
+                            SET 
+                            id={id_steps},
+                            step_content='{step_content}',
+                            step_selector='{step_selector}',
+                            step_next={step_next}
+                            WHERE ID_steps = {id_step};
+                        """)
+        db.commit()
+
+    def remove_guid_step(self, id):
+        cursor, db = self.connect_data_base()
+        cursor.execute(f"DELETE FROM {self.table_steps} WHERE ID_steps={id}")
+        db.commit()
+
 
 p1 = DataBase()
 # p1.insert_new_guides("Guide_3")
@@ -102,8 +132,11 @@ p1 = DataBase()
 # print(p1.get_results_guides())
 # print(p1.get_results_guides(18))
 
-for row in p1.get_results_guides():
-    print(row[0])
-    print(row[1])
+# for row in p1.get_results_guides():
+#     print(row[0])
+#     print(row[1])
 
+# print(p1.get_results_guide_steps(18))
 
+# p1.update_guide_step(1, "test text 1", ".class-1", 2, 1)
+# print(p1.get_results_guide_steps(1))
