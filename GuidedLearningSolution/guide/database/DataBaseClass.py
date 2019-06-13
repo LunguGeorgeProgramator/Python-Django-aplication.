@@ -27,6 +27,23 @@ class DataBase:
                                  FOREIGN KEY (id_guide) REFERENCES {table_results}(ID_guide)
                                 );"""
 
+    create_test_data_for_tables = {
+        table_steps: [
+            {1: "", "test text 1": "", ".class-1": "",  2: "", "1": ""},
+            {"2": "", "test text 2": "", ".class-2": "",  3: "", "1": ""},
+            {"3": "", "test text 3": "", "#id1": "",  4: "", "1": ""},
+            {"4": "", "test text 4": "", "#id2": "",  5: "", "1": ""},
+            {"5": "", "test text 5": "", ".class-3": "",  6: "", "1": ""}
+        ],
+        table_results: [
+            {"Guide_1": ""},
+            {"Guide_2": ""},
+            {"Guide_3": ""},
+            {"Guide_4": ""},
+            {"Guide_5": ""}
+        ]
+    }
+
     def create_missing_data_base(self):
         db = MySQLdb.connect(host=self.host_mysql, user=self.user_mysql, passwd=self.pass_mysql)
         cursor = db.cursor()
@@ -38,10 +55,19 @@ class DataBase:
             db = MySQLdb.connect(host=self.host_mysql, user=self.user_mysql, passwd=self.pass_mysql,  database=self.data_base_name)
             cursor = db.cursor()
             for table_to_check, sql_create in [(self.table_results, self.SQL_create_guide_results), (self.table_steps, self.SQL_create_guide_steps)]:
+                print(table_to_check)
                 check_table = cursor.execute(f"SHOW TABLES LIKE '%{table_to_check}%';")
                 if check_table:
                     continue
                 cursor.execute(sql_create)
+                for result_to_put in self.create_test_data_for_tables.get(table_to_check, []):
+                    # print(result_to_put)
+                    # print('========')
+                    if self.table_results == table_to_check:
+                        self.insert_new_guides(*result_to_put)
+                    else:
+                        self.insert_new_guide_step(*result_to_put)
+
             return cursor, db
         except Error as e:
             raise BaseException("SQL error ", e)
@@ -49,13 +75,12 @@ class DataBase:
     def connect_data_base(self):
         try:
             try:
-                #
-                # db = MySQLdb.connect(host=self.host_mysql, user=self.user_mysql, passwd=self.pass_mysql,
-                #                 database=self.data_base_name)
+                db = MySQLdb.connect(host=self.host_mysql, user=self.user_mysql, passwd=self.pass_mysql, database=self.data_base_name)
+
                 # cursor = db.cursor()
                 # cursor.execute(f'DROP DATABASE {self.data_base_name};')
                 # return cursor, db
-                db = MySQLdb.connect(host=self.host_mysql, user=self.user_mysql, passwd=self.pass_mysql, database=self.data_base_name)
+
                 return db.cursor(), db
             except Error:
                 # if the database dose not exist connect and create a new one and a new table
@@ -120,23 +145,12 @@ class DataBase:
         db.commit()
 
 
-p1 = DataBase()
-# p1.insert_new_guides("Guide_3")
-# p1.insert_new_guides("Guide_4")
-# p1.insert_new_guides("Guide_5")
-# p1.insert_new_guides("Guide_6")
-# p1.insert_new_guides("Guide_7")
-# p1.insert_new_guides("Guide_8")
-# p1.insert_new_guides("Guide_9")
-# p1.insert_new_guides("Guide_10")
-# print(p1.get_results_guides())
-# print(p1.get_results_guides(18))
-
-# for row in p1.get_results_guides():
-#     print(row[0])
-#     print(row[1])
-
-# print(p1.get_results_guide_steps(18))
-
-# p1.update_guide_step(1, "test text 1", ".class-1", 2, 1)
-# print(p1.get_results_guide_steps(1))
+if __name__ == '__main__':
+    p1 = DataBase()
+    # print(p1.get_results_guide_steps(1))
+    # p1.insert_new_guides("Guide_10")
+    print(p1.get_results_guides())
+    # print(p1.get_results_guides(18))
+    # print(p1.get_results_guide_steps(18))
+    # p1.update_guide_step(1, "test text 1", ".class-1", 2, 1)
+    # print(p1.get_results_guide_steps(1))

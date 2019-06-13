@@ -2,9 +2,10 @@
 {% block main_content %}
 	{{text}}
 	<div class="bd-example" style="height: 100px;">
-    	<a  href="javascript:history.back()" class="btn btn-secondary btn-lg active class_b_list" style="margin-right: 10px">
+    	<a  href="javascript:history.back()" class="btn btn-secondary btn-lg active class_b_list" >
 				Back
 			</a>
+		<div class="btn btn-secondary btn-lg active class_b_list" onclick="showGiudMenu()" style="margin-right: 10px; cursor: pointer;" >Display json</div>
 	</div>
 	<div class="bd-example">
 		<form  method="post" action="">
@@ -44,10 +45,60 @@
 	{% endfor %}
 	<pre>]}</pre>
 	</ul>
-
+<div  class="hidden " open-popup="close" >
+	<div class="x-button btn btn-secondary btn-lg active class_b_list" onclick ="showGiudMenu()">X</div>
+	<pre>
+	{
+		"steps": [
+		{% for text_send_row in content_data %}
+			{
+				"id": "{{ text_send_row.id }}",
+				"content": "{{ text_send_row.step_content }}",
+				"selector": "{{ text_send_row.step_selector }}",
+				"next": "{{ text_send_row.step_next }}"
+			},
+		{% endfor %}
+		]
+	}
+	</pre>
+</div>
 <!--<h1>{{name_get_var}}</h1>-->
 <!--<h2>{{ text }}</h2>-->
+<script>
+	function showGiudMenu(){
+	section = $('.hidden')
+	const openAttr = section.attr('open-popup');
+	if (openAttr == 'close'){
+		section.show();
+		section.attr('open-popup', 'open');
+	}else {
+		section.hide();
+		section.attr('open-popup', 'close');
+	}
+	}
+</script>
 <style>
+	.x-button{
+	   cursor: pointer;
+	   cursor: pointer;
+	   margin: 10px;
+	   border-radius: 20px;
+	}
+	.hidden{
+	   background-color: #f8f9fa;
+	   width: 600px;
+	   height: auto;
+	   position: absolute;
+	   left: 50%;
+	   top: 50%;
+	   transform: translate(-50%, -50%);
+	   border: 1px solid rgba(0,0,0,.125);
+	   z-index: 999;
+	   display: none;
+	}
+	.hidden pre {
+	    margin-top: 30px;
+	}
 	.bd-example{
 		padding: 1.5rem;
 		margin-right: 0;
