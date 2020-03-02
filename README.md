@@ -4,7 +4,8 @@ The front end part made in a simply html file and javascript, using jQuery. Just
 The back end part made in python Django:
 
 This project is a simple DJango app, I am ussing bitnami-djangostack-2.2.2-0,
-for windows. It can be downloaded from link:
+for windows. It is a dynamic assistant that has a back end where you set html tags and in front end a jQuery script that tracks the tags and display help messages.
+It can be downloaded from link:
 
 https://bitnami.com/stack/django/installer
 
